@@ -1,0 +1,121 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+	</head>
+	<body style=" background-color: #0288d1;">
+		<div style=" text-align: center; margin-top: 10px; margin-bottom: 10px; color: white;">ACTUALMENTE HAY</div>
+		<div style="display: block; margin-left: auto; margin-right: auto; width: 39%;">
+			<div style="color: white; display: table-cell;vertical-align: middle; text-align: center; width: 120px; height: 120px; -moz-border-radius: 50%;-webkit-border-radius: 50%;border-radius: 50%;background: #5cb85c; font-size: -webkit-xxx-large;s" id="content">0</div>
+			<div id="container2"></div>
+		</div>
+		<div style=" text-align: center; margin-top: 10px; margin-bottom: 10px; color: white;">PERSONAS EN EL LUGAR</div>
+
+		<div id="container"></div>
+	
+		<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+		<script src="https://code.highcharts.com/stock/highstock.js"></script>
+		<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+
+		<script>
+
+			function updateConunt (count) {
+				document.getElementById("content").innerHTML = count;
+			}
+
+			let char = Highcharts.stockChart('container', {
+			    chart: {
+			        events: {
+			            load: function () {
+
+			                // set up the updating of the chart each second
+			                var series = this.series[0];
+			                setInterval(function () {
+			                    var x = (new Date()).getTime(), // current time
+			                        y = Math.round(Math.random() * 100);
+			                    series.addPoint([x, y], true, true);
+			                }, 1000);
+			            }
+			        }
+			    },
+
+			    time: {
+			        useUTC: false
+			    },
+
+			    rangeSelector: {
+			        buttons: [{
+			            count: 1,
+			            type: 'minute',
+			            text: '1M'
+			        }, {
+			            count: 5,
+			            type: 'minute',
+			            text: '5M'
+			        }, {
+			            type: 'all',
+			            text: 'All'
+			        }],
+			        inputEnabled: false,
+			        selected: 2
+			    },
+
+			    credits: {
+					enabled: false
+				},
+
+			    title: {
+			        text: 'Historico de personas'
+			    },
+
+			    exporting: {
+			        enabled: false
+			    },
+
+			    series: [{
+			        name: 'Personas',
+			        data: (function () {
+			            // generate an array of random data
+			            var data = [],
+			                time = (new Date()).getTime(),
+			                i;
+
+			            for (i = 0; i <= 999; i ++) {
+			                data.push([
+			                    i,
+			                    0
+			                ]);
+			            }
+			            return data;
+			        }())
+			    }]
+			});
+
+			function updateChart (d) {
+
+				var Json = "\'" + d + "\'";
+				console.log("LOG1 " + Json);
+				var t = jQuery.parseJSON(Json);
+				console.log("LOG2 " + t);
+
+				for (var i = t.length - 1; i >= 0; i--) {
+
+					document.getElementById("container2").innerHTML = t[i];
+				}
+				/*
+                let series = char.series[0];
+                let x = (new Date()).getTime()
+                let y = data[0].AC
+                series.addPoint([x, y], true, true);
+                */
+
+				
+			}
+		</script>
+
+	</body>
+</html>
